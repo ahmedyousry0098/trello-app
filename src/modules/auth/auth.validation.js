@@ -41,3 +41,4 @@ export const resetPasswordSchema = joi.object({
         "string.pattern.base": "In-valid Password"
     })
 }).required()
+

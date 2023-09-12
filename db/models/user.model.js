@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     gender: {type: String, enum: ['male', 'female']},
     isConfirmed: {type: Boolean, default: false},
     isDeleted: {type: Boolean, default: false},
-
+    isLoggedIn: {type: Boolean, default: false}
 })
 
 userSchema.pre('save', function(next) {
