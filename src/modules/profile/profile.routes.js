@@ -7,12 +7,12 @@ import { PermanentDeletion, deleteProfile, logOut, updateProfile } from './profi
 
 const router = Router()
 
-router.put('/:profileId', isAuthenticated, isValid(updateProfileSchema), asyncHandler(updateProfile))
+router.put('/:profileId', isValid(updateProfileSchema), isAuthenticated, asyncHandler(updateProfile))
 
-router.patch('/:profileId/delete', isAuthenticated, isValid(deleteProfileSchema), asyncHandler(deleteProfile))
+router.patch('/:profileId/delete', isValid(deleteProfileSchema), isAuthenticated, asyncHandler(deleteProfile))
 
-router.delete('/:profileId/Permanent-deletion', isAuthenticated, isValid(deleteProfileSchema), asyncHandler(PermanentDeletion))
+router.delete('/:profileId/Permanent-deletion', isValid(deleteProfileSchema), isAuthenticated, asyncHandler(PermanentDeletion))
 
-router.patch('/:profileId/logout', isAuthenticated, isValid(logOutSchema), asyncHandler(logOut))
+router.patch('/:profileId/logout', isValid(logOutSchema), isAuthenticated, asyncHandler(logOut))
 
 export default router

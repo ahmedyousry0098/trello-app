@@ -5,6 +5,7 @@ process.on('uncaughtException', (err) => {
 import express from 'express'
 import authRouter from './src/modules/auth/auth.routes.js'
 import profileRouter from './src/modules/profile/profile.routes.js'
+import tasksRouter from './src/modules/tasks/tasks.routes.js'
 import { connectDB } from './db/connection.js'
 import {config} from 'dotenv'
 import cors from 'cors'
@@ -22,6 +23,7 @@ app.use(express.urlencoded({extended: false}))
 
 app.use(`/`, authRouter)
 app.use('/profile', profileRouter)
+app.use('/tasks', tasksRouter)
 
 app.use('*', (req, res, next) => {
     return res.status(404).json({message: 'Page Not Found'})
