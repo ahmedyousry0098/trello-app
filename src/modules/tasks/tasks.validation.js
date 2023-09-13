@@ -14,6 +14,7 @@ export const updateTaskSchema = Joi.object({
     description: Joi.string().min(10).max(10000),
     assignTo: GENERAL_FIELDS.Id,
     deadline: Joi.date(),
+    status: Joi.string().valid('toDo', 'done', 'doing')
 }).required()
 
 export const deleteTaskSchema = Joi.object({
