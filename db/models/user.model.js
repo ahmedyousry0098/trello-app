@@ -11,6 +11,13 @@ const userSchema = new mongoose.Schema({
     isConfirmed: {type: Boolean, default: false},
     isDeleted: {type: Boolean, default: false},
     isLoggedIn: {type: Boolean, default: false}
+}, {
+    timestamps: true,
+    methods: {
+        isPasswordMatch(password) {
+            return bcrypt.compareSync(password, this.password)
+        }
+    }
 })
 
 userSchema.pre('save', function(next) {

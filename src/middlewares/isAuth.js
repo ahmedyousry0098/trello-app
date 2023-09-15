@@ -10,7 +10,7 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
     const token = authorization.replace(process.env.TOKEN_PREFIX, "")
     const decoded = jwt.verify(token, process.env.TOKEN_SIGNATURE)
     if (!decoded || !decoded.id) {
-        return next(new ResponseError(generalMsgs.INVALID_TOKEN, 400))
+        return next(new ResponseError('In-valid token', 400))
     }
     const user = await UserModel.findById(decoded.id).select("-password")
     if (!user) (next(new ResponseError('User Not Found, Please Try To Sign Up First', 400)))
