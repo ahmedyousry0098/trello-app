@@ -13,7 +13,8 @@ export const register = async (req, res, next) => {
     }
     const user = new UserModel({...req.body, email: email.toLowerCase()})
     const token = jwt.sign({id: user._id, email: user.email}, process.env.TOKEN_SIGNATURE, {expiresIn: 60*60*24})
-    const confirmationLink = `${req.protocol}://${req.headers.host}${process.env.BASE_URL}/${token}/confirm-email`
+    const confirmationLink = `${req.protocol}://${req.headers.host}/${token}/confirm-email`
+    console.log(confirmationLink);
     const emailInfo = await sendEmail({
         to: user.email, 
         subject: 'Confirm Your Email', 
