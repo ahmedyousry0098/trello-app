@@ -15,9 +15,9 @@ export class ResponseError extends Error {
 
 export const asyncHandler = (API) => {
     return (req, res, next) => {
-        API(req, res, next).catch(error => (
-            next(error)
-        ))
+        return API(req, res, next).catch(error => {
+            return res.status(400).json({message: error.message})
+        })
     }
 }
 

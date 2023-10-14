@@ -9,6 +9,7 @@ import tasksRouter from './src/modules/tasks/tasks.routes.js'
 import { connectDB } from './db/connection.js'
 import {config} from 'dotenv'
 import cors from 'cors'
+import { globalErrorHandling } from './src/utils/ErrorHandling.js'
 config({path: './config/.env'})
 
 const app = express()
@@ -28,6 +29,8 @@ app.use('/tasks', tasksRouter)
 app.use('*', (req, res, next) => {
     return res.status(404).json({message: 'Page Not Found'})
 })
+
+app.use(globalErrorHandling)
 
 process.on('unhandledRejection', (err) => {
     console.error(`${err}`)
