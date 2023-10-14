@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start:dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "18.13.0"
   },
   "keywords": [],
   "author": "",
