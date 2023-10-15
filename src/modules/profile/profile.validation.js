@@ -11,8 +11,8 @@ export const updateProfileSchema = joi.object({
 
 export const deleteProfileSchema = joi.object({
     profileId: GENERAL_FIELDS.Id.required()
-})
+}).required()
 
 export const logOutSchema = joi.object({
     profileId: GENERAL_FIELDS.Id.required()
-})
+}).required()

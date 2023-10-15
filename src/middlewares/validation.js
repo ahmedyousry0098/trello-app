@@ -16,8 +16,12 @@ export const isValid = (schema={}) => {
     return (req, res, next) => {
         const keys = {...req.body, ...req.params, ...req.query}
         const result = schema.validate(keys, {abortEarly: false})
+        let messages = []
         if (result?.error?.details) {
-            return res.status(406).json({message: 'validation error'})
+            for (let err of result.error.details) {
+                messages.push(err.message)
+            }
+            return res.status(400).json({message: messages})
         }
         next()
     }

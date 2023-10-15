@@ -4,7 +4,7 @@ import {sendEmail} from '../../utils/sendEmail.js'
 import {confirmEmailTamp} from '../../utils/templates/confirmEmail.js'
 import { ResponseError } from '../../utils/ErrorHandling.js'
 import { resetPasswordTemp } from '../../utils/templates/resetPasswordEmail.js'
-import {nanoid} from 'nanoid'
+import {customAlphabet} from 'nanoid'
 
 export const register = async (req, res, next) => {
     const {email} = req.body
@@ -74,8 +74,8 @@ export const forgetPassword = async (req, res, next) => {
     const {email} = req.body;
     const user = await UserModel.findOne({email})
     if (!user) return next(new ResponseError('User Not Found', 400))
-    const verificationCode = nanoid(4)
-    user.verificationCode = verificationCode
+    const genVerificationCode = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 5)
+    const verificationCode = genVerificationCode()
     await UserModel.findOneAndUpdate({email}, {verificationCode})
     const emailInfo = await sendEmail({
         to: email, 
@@ -87,6 +87,7 @@ export const forgetPassword = async (req, res, next) => {
 }
 
 export const resetPassword = async (req, res, next) => {
+    console.log('user');
     const {email, code, password} = req.body
     const user = await UserModel.findOne({email})
     if (!user) return next(new ResponseError('user not found', 404))

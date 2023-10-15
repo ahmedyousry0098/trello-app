@@ -51,7 +51,7 @@ export const resetPasswordTemp = ({verificationCode}) => {
                                                 We cannot simply send you your old password. A unique Code to reset your
                                                 password has been generated for you. To reset your password, use the code below to reset your password
                                             </p>
-                                            <p style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">
+                                            <p style="font-weight:500; margin-top:35px; border: 2px; border-radius: 5px; font-size:18px;padding:10px 24px;display:inline-block;border-radius:50px;">
                                                 ${verificationCode}
                                             </p>
                                         </td>

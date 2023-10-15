@@ -13,6 +13,6 @@ router.patch('/:profileId/delete', isValid(deleteProfileSchema), isAuthenticated
 
 router.delete('/:profileId/Permanent-deletion', isValid(deleteProfileSchema), isAuthenticated, asyncHandler(PermanentDeletion))
 
-router.patch('/:profileId/logout', isValid(logOutSchema), isAuthenticated, asyncHandler(logOut))
+router.patch('/:profileId/logout', isAuthenticated, asyncHandler(logOut))
 
 export default router

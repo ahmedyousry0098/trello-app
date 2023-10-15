@@ -31,10 +31,10 @@ export const forgetPasswordSchema = joi.object({
 
 export const resetPasswordSchema = joi.object({
     email: GENERAL_FIELDS.email.required(),
-    code: joi.string().length(4).required().messages({
+    code: joi.string().length(5).required().messages({
         "any.required": "Code is Required",
         "string.base": "In-valid Code",
-        "string.length": "In-valid Code"
+        "string.length": "In-valid Verification Code"
     }),
     password: GENERAL_FIELDS.password.required().messages({
         "any.required": "Password is Required",
