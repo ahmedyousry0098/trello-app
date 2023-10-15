@@ -5,7 +5,7 @@ export const addTaskSchema = Joi.object({
     title: Joi.string().min(3).max(3000),
     description: Joi.string().min(10).max(10000),
     assignTo: GENERAL_FIELDS.Id.required(),
-    deadline: Joi.date(),
+    deadline: Joi.date().greater(Date.now()),
 }).required()
 
 export const updateTaskSchema = Joi.object({

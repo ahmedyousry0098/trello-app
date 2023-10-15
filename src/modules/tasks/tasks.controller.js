@@ -5,7 +5,7 @@ import { ResponseError } from "../../utils/ErrorHandling.js"
 export const addTask = async (req, res, next) => {
     const {title, description, assignTo, deadline} = req.body
     const {id} = req.user
-    const assigedTo = await UserModel.findById(assignTo)
+    const assigedTo = await UserModel.findOne({_id: assignTo, isDeleted: false})
     if (!assigedTo) return next(new ResponseError('Assigned To User is not exist', 400))
     const task = new TaskModel({
         title, 
@@ -29,7 +29,7 @@ export const updateTask = async (req, res, next) => {
         return next(new ResponseError('This Task Only Modifiable by it\'s Creator'))
     }
     if (req.body.assignTo) {
-        const assignedTo = await UserModel.findById(req.body.assignTo)
+        const assignedTo = await UserModel.findOne({_id: req.body.assignTo, isDeleted: false})
         if (!assignedTo) {
             return next(new ResponseError('assigned to user not found', 400))
         }

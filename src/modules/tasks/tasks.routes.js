@@ -7,14 +7,14 @@ import { addTaskSchema, deleteTaskSchema, updateTaskSchema } from "./tasks.valid
 
 const router = Router()
 
-router.post('/add', isValid(addTaskSchema), isAuthenticated, asyncHandler(addTask))
+router.post('/', isValid(addTaskSchema), isAuthenticated, asyncHandler(addTask))
 
 router.put('/:taskId', isValid(updateTaskSchema), isAuthenticated, asyncHandler(updateTask))
 
-router.delete(':/taskId', isValid(deleteTaskSchema)), isAuthenticated, asyncHandler(deleteTask)
+router.delete('/:taskId', isValid(deleteTaskSchema), isAuthenticated, asyncHandler(deleteTask))
 
 router.get('/all', asyncHandler(getAllTasks))
 
-router.get('/overdue-tasks', asyncHandler(overduseTasks))
+router.get('/overdue', asyncHandler(overduseTasks))
 
 export default router
