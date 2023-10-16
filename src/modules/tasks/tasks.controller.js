@@ -6,7 +6,7 @@ export const addTask = async (req, res, next) => {
     const {title, description, assignTo, deadline} = req.body
     const {id} = req.user
     const assigedTo = await UserModel.findOne({_id: assignTo, isDeleted: false})
-    if (!assigedTo) return next(new ResponseError('Assigned To User is not exist', 400))
+    if (!assigedTo) return next(new ResponseError('Assigned User is not exist', 400))
     const task = new TaskModel({
         title, 
         description,

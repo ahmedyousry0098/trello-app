@@ -1,6 +1,6 @@
 import {UserModel} from '../../db/models/user.model.js'
 import jwt from 'jsonwebtoken'
-import { ResponseError, generalMsgs, asyncHandler } from '../utils/ErrorHandling.js'
+import { ResponseError, asyncHandler } from '../utils/ErrorHandling.js'
 
 export const isAuthenticated = asyncHandler(async (req, res, next) => {
     const {authorization} = req.headers

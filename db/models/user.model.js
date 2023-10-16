@@ -3,11 +3,12 @@ import bcrypt from 'bcryptjs'
 
 const userSchema = new mongoose.Schema({
     username: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
+    email: {type: String, required: true, unique: true, lowercase: true},
     password: {type: String, required: true},
     age: {type: String},
     phone: {type: String},
-    gender: {type: String, enum: ['male', 'female']},
+    gender: {type: String, enum: ['male', 'female'], required: true, lowercase: true},
+    role: {type: String, enum: ['employee', 'team-leader'], default: 'employee', lowercase: true},
     isConfirmed: {type: Boolean, default: false},
     isDeleted: {type: Boolean, default: false},
     isLoggedIn: {type: Boolean, default: false},

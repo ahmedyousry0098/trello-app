@@ -6,7 +6,8 @@ export const updateProfileSchema = joi.object({
     username: joi.string(),
     phone: joi.string().regex(/^(002)?(01)[0125][0-9]{8}$/),
     age: joi.number().positive().min(8).max(80),
-    gender: joi.string().valid('male', 'female')
+    gender: joi.string().valid('male', 'female'),
+    role: joi.string().valid('team-leader', 'employee'),
 }).required()
 
 export const deleteProfileSchema = joi.object({

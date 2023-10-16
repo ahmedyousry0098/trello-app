@@ -5,8 +5,9 @@ const tasksSchema = new Schema({
     description: {type: String, required: true},
     status: {
         type: String,
-        enum: ['toDo', 'doing', 'done'],
-        default: "toDo"
+        enum: ['todo', 'doing', 'done'],
+        default: "todo",
+        lowercase: true
     },
     createdBy: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
     assignTo: {type: mongoose.Types.ObjectId, ref: 'User', required: true},

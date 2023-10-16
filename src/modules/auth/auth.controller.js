@@ -12,9 +12,16 @@ export const register = async (req, res, next) => {
         return next(new ResponseError('Email Already Exist', 409))
     }
     const user = new UserModel({...req.body, email: email.toLowerCase()})
-    const token = jwt.sign({id: user._id, email: user.email}, process.env.TOKEN_SIGNATURE, {expiresIn: 60*60*24})
+    const token = jwt.sign(
+        {
+            id: user._id, 
+            email: user.email, 
+            role: user.role
+        }, 
+        process.env.TOKEN_SIGNATURE, 
+        {expiresIn: 60*60*24}
+    )
     const confirmationLink = `${req.protocol}://${req.headers.host}/${token}/confirm-email`
-    console.log(confirmationLink);
     const emailInfo = await sendEmail({
         to: user.email, 
         subject: 'Confirm Your Email', 
@@ -52,7 +59,15 @@ export const logIn = async (req, res, next) => {
         return next(new ResponseError('Account has been deleted, try to sign up again', 401))
     }
     if (!user.isConfirmed) {
-        const token = jwt.sign({id: user._id, email: user.email}, process.env.TOKEN_SIGNATURE, {expiresIn: 60*60*24})
+        const token = jwt.sign(
+            {
+                id: user._id, 
+                email: user.email,
+                role: user.id
+            }, 
+            process.env.TOKEN_SIGNATURE, 
+            {expiresIn: 60*60*24}
+        )
         const confirmationLink = `${req.protocol}://${req.headers.host}${process.env.BASE_URL}/${token}/confirm-email`
         const emailInfo = await sendEmail({
             to: user.email, 
@@ -66,8 +81,16 @@ export const logIn = async (req, res, next) => {
     }
     const logIn = await UserModel.findByIdAndUpdate(user._id, {isLoggedIn: true})
     if (!logIn) return next(new ResponseError('something went wrong please try again', 500))
-    const token = jwt.sign({id: user._id, email: user.email}, process.env.TOKEN_SIGNATURE, {expiresIn: 60*60*24*100})
-    return res.status(200).json({message: 'Logged In Successfully', token, user_id: logIn._id})
+    const token = jwt.sign(
+        {
+            id: user._id, 
+            email: user.email,
+            role: user.id
+        }, 
+        process.env.TOKEN_SIGNATURE, 
+        {expiresIn: 60*60*24}
+    )
+    return res.status(200).json({message: 'Logged In Successfully', token})
 }
 
 export const forgetPassword = async (req, res, next) => {
@@ -87,7 +110,6 @@ export const forgetPassword = async (req, res, next) => {
 }
 
 export const resetPassword = async (req, res, next) => {
-    console.log('user');
     const {email, code, password} = req.body
     const user = await UserModel.findOne({email})
     if (!user) return next(new ResponseError('user not found', 404))
