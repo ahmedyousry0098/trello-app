@@ -73,7 +73,7 @@ export const getAllTasks = async (req, res, next) => {
         return next(new ResponseError('Something Went Wrong Please Try Again'))
     }
 
-    return res.status(200).json({tasks})
+    return res.status(200).json({message: 'done', tasks})
 }
 
 export const overduseTasks = async (req, res, next) => {
@@ -82,6 +82,51 @@ export const overduseTasks = async (req, res, next) => {
             {deadline: {$lt: Date.now()}},
             {status: {$neq: 'done'}}
         ]
-    })
-    return res.status(200).json(tasks)
+    }).populate([
+        {
+            path: 'createdBy',
+            select: "username email phone"
+        },
+        {
+            path: 'assignTo',
+            select: 'username email phone'
+        }
+    ])
+    return res.status(200).json({message: 'done', tasks})
+}
+
+export const getUserTasks = async (req, res, next) => {
+    const {id} = req.user
+    const userTasks = await TaskModel.find({assignTo: id}).populate([
+        {
+            path: 'createdBy',
+            select: "username email phone"
+        },
+        {
+            path: 'assignTo',
+            select: 'username email phone'
+        }
+    ])
+    if (!userTasks.length) {
+        return next(new ResponseError('you haven\'t tasks yet'))
+    }
+    return res.status(200).json({message: 'done', tasks: userTasks})
+}
+
+export const getAssignedTasks = async(req, res, next) => {
+    const {id} = req.user
+    const userTasks = await TaskModel.find({createdBy: id}).populate([
+        {
+            path: 'createdBy',
+            select: "username email phone"
+        },
+        {
+            path: 'assignTo',
+            select: 'username email phone'
+        }
+    ])
+    if (!userTasks.length) {
+        return next(new ResponseError('you haven\'t tasks yet'))
+    }
+    return res.status(200).json({message: 'done', tasks: userTasks})
 }
