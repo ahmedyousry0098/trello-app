@@ -14,8 +14,6 @@ const tasksSchema = new Schema({
     deadline: {type: Date}
 }, {
     timestamps: true,
-    toJSON: true,
-    toObject: true
 })
 
 export const TaskModel = mongoose.model('Task', tasksSchema)
