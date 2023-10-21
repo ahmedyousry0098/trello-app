@@ -64,3 +64,20 @@ export const logOut = async (req, res, next) => {
     }
     return res.status(200).json({message: 'logged out successfully'})
 }
+
+export const whoAmI = async (req, res, next) => {
+    const {id} = req.user
+    const user = await UserModel.findById(id).select('-password')
+    return res.status(200).json({message: 'done', user})
+}
+
+export const getAllUsers = async (req, res, next) => {
+    const users = await UserModel.find().select('-password')
+    if (!users) {
+        return next(new ResponseError('something went wrong'))
+    }
+    if (!users.length) {
+        return next(new ResponseError('No users Found', 404))
+    }
+    return res.status(200).json({message: "done", users})
+}
