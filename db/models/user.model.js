@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     age: {type: String},
     phone: {type: String},
-    gender: {type: String, enum: ['male', 'female'], required: true, lowercase: true},
+    gender: {type: String, enum: ['male', 'female'], lowercase: true},
     role: {type: String, enum: ['employee', 'team-leader'], default: 'employee', lowercase: true},
     isConfirmed: {type: Boolean, default: false},
     isDeleted: {type: Boolean, default: false},

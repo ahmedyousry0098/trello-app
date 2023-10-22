@@ -5,6 +5,7 @@ import {confirmEmailTamp} from '../../utils/templates/confirmEmail.js'
 import { ResponseError } from '../../utils/ErrorHandling.js'
 import { resetPasswordTemp } from '../../utils/templates/resetPasswordEmail.js'
 import {customAlphabet} from 'nanoid'
+import {OAuth2Client} from 'google-auth-library'
 
 export const register = async (req, res, next) => {
     const {email} = req.body
@@ -35,6 +36,61 @@ export const register = async (req, res, next) => {
         return next(new ResponseError(`something went wrong please try again`, 500))
     }
     return res.status(201).json({message: 'Success, please check your email to confirm your account!'})
+}
+
+export const continueWithGoogle = async (req, res, next) => {
+    const {credintial} = req.body
+    const client = new OAuth2Client(process.env.G_CLIENT_ID);
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken: credintial,
+            audience: process.env.G_CLIENT_ID,
+        });
+        const payload = ticket.getPayload()
+        return payload
+    }
+    const {email_verified, email, name} = await verify()
+    if (!email_verified) {
+        return next(new ResponseError('Google Email is Not Verified', 400))
+    }
+    const user = await UserModel.findOne({email})
+    if (user && !user.isDeleted) {
+        if (!user.isConfirmed) {
+            await UserModel.findOneAndUpdate({email}, {isConfirmed: true})
+        }
+        const token = jwt.sign(
+            {
+                id: user._id, 
+                email: user.email,
+                role: user.id
+            }, 
+            process.env.TOKEN_SIGNATURE, 
+            {expiresIn: 60*60*24}
+        )
+        return res.status(200).json({message: 'Logged In Successfully', token})
+    }
+    const newPass = customAlphabet('abcdefghijklmnopqrstuvwxyz123456789!@#$%^&')
+
+    const newUser = await UserModel.create({
+        email,
+        username: name,
+        password: newPass(),
+        isConfirmed: true,
+        role: "employee",
+        isLoggedIn: true,
+        isDeleted: false
+    })
+    if (!newUser) return next(new ResponseError('Something went wrong please try again'))
+    const token = jwt.sign(
+        {
+            id: newUser._id, 
+            email: newUser.email,
+            role: newUser.id
+        }, 
+        process.env.TOKEN_SIGNATURE, 
+        {expiresIn: 60*60*24}
+    )
+    return res.status(200).json({message: 'Account Created & logged In Successfully', token})
 }
 
 export const confirmEmail = async (req, res, next) => {
@@ -90,7 +146,7 @@ export const logIn = async (req, res, next) => {
         process.env.TOKEN_SIGNATURE, 
         {expiresIn: 60*60*24}
     )
-    return res.status(200).json({message: 'Logged In Successfully', token})
+    return res.status(201).json({message: 'Logged In Successfully', token})
 }
 
 export const forgetPassword = async (req, res, next) => {
