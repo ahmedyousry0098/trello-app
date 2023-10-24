@@ -69,7 +69,7 @@ export const continueWithGoogle = async (req, res, next) => {
         )
         return res.status(200).json({message: 'Logged In Successfully', token})
     }
-    const newPass = customAlphabet('abcdefghijklmnopqrstuvwxyz123456789!@#$%^&')
+    const newPass = customAlphabet('abcdefghijklmnopqrstuvwxyz123456789!@#$%^&', 8)
 
     const newUser = await UserModel.create({
         email,
